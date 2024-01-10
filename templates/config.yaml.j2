@@ -48,6 +48,7 @@ network:
 {% endfor %}
 {% endif %}
 {% if netplan_wifis is defined %}
+  wifis:
 {% for wifi_interface, config in netplan_wifis.items() %}
     {{ wifi_interface }}:
       dhcp4: {{ config['dhcp4'] | default('yes') }}
