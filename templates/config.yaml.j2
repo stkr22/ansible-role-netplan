@@ -41,11 +41,32 @@ network:
         search:
 {%for search in ethernet['nameservers']['search'] %}
           - "{{ search }}"
-{% endfor %}
-{% endif %}
-{% endif %}
-{% endif %}
-{% endfor %}
-{% endif %}
+{%- endfor %}
+{%- endif %}
+{%- endif %}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+{%- if netplan_wifis is defined %}
+{%- for wifi_interface, config in netplan_wifis.items() %}
+    {{ wifi_interface }}:
+      dhcp4: {{ config.dhcp4 | default('yes') }}
+{%- if config.addresses %}
+      addresses: [{{ config.addresses | join(', ') }}]
+{%- endif %}
+{%- if config.gateway4 %}
+      routes:
+        - to: "default"
+          via: "{{ config.gateway4 }}"
+{%- endif %}
+{%- if config.nameservers %}
+      nameservers:
+        addresses: [{{ config.nameservers.addresses | join(', ') }}]
+{%- endif %}
+      access-points:
+        "{{ config.ssid }}":
+          password: "{{ config.password }}"
+{%- endfor %}
+{%- endif %}
 
 ...
