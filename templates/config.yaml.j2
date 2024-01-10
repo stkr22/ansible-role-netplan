@@ -33,7 +33,7 @@ network:
       nameservers:
 {% if ethernet['nameservers']['addresses'] is defined %}
         addresses:
-{%for addresses in ethernet['nameservers']['addresses'] %}
+{% for addresses in ethernet['nameservers']['addresses'] %}
           - "{{ addresses }}"
 {% endfor %}
 {% endif %}
@@ -41,35 +41,35 @@ network:
         search:
 {%for search in ethernet['nameservers']['search'] %}
           - "{{ search }}"
-{%- endfor %}
-{%- endif %}
-{%- endif %}
-{%- endif %}
-{%- endfor %}
-{%- endif %}
-{%- if netplan_wifis is defined %}
-{%- for wifi_interface, config in netplan_wifis.items() %}
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if netplan_wifis is defined %}
+{% for wifi_interface, config in netplan_wifis.items() %}
     {{ wifi_interface }}:
       dhcp4: {{ config['dhcp4'] | default('yes') }}
       dhcp6: {{ config['dhcp6']  | default('yes') }}
-{%- if config['addresses'] is defined %}
+{% if config['addresses'] is defined %}
       addresses: [{{ config['addresses'] | join(', ') }}]
-{%- endif %}
-{%- if config['gateway4'] is defined %}
+{% endif %}
+{% if config['gateway4'] is defined %}
       routes:
         - to: "default"
           via: "{{ config['gateway4'] }}"
-{%- endif %}
+{% endif %}
 {% if config['nameservers']['addresses'] is defined %}
         addresses:
-{%for address in config['nameservers']['addresses'] %}
+{% for address in config['nameservers']['addresses'] %}
           - "{{ address }}"
 {% endfor %}
 {% endif %}
       access-points:
         "{{ config.ssid }}":
           password: "{{ config.password }}"
-{%- endfor %}
-{%- endif %}
+{% endfor %}
+{% endif %}
 
 ...
