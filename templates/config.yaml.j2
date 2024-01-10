@@ -51,6 +51,7 @@ network:
 {%- for wifi_interface, config in netplan_wifis.items() %}
     {{ wifi_interface }}:
       dhcp4: {{ config.dhcp4 | default('yes') }}
+      dhcp6: {{ config.dhcp6 | default('yes') }}
 {%- if config.addresses %}
       addresses: [{{ config.addresses | join(', ') }}]
 {%- endif %}
