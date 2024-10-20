@@ -13,16 +13,15 @@ network:
 {% if netplan_interfaces['ethernets'] is defined %}
   ethernets:
 {% for interface_name, config in netplan_interfaces['ethernets'].items() %}
-      {{ interface_name }}:
-        {{ config | to_yaml(indent=6) }}
+    {{ interface_name }}:
+      {{ config | to_nice_yaml | indent(6) }}
 {% endfor %}
 {% endif %}
 {% if netplan_interfaces['wifis'] is defined %}
   wifis:
 {% for interface_name, config in netplan_interfaces['wifis'].items() %}
-      {{ interface_name }}:
-        {{ config | to_yaml(indent=6) }}
+    {{ interface_name }}:
+      {{ config | to_nice_yaml | indent(6) }}
 {% endfor %}
 {% endif %}
 
-...
