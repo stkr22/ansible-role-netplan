@@ -15,6 +15,13 @@ network:
 {% for ethernet in netplan_ethernets %}
 {% if ethernet['interface_name'] is defined %}
     {{ ethernet['interface_name'] }}:
+{% if ethernet['match'] is defined %}
+      match:
+        macaddress: "{{ ethernet['match']['macaddress'] }}"
+{% endif %}
+{% if ethernet['set-name'] is defined %}
+      set-name: ethernet['set-name']
+{% endif %}
 {% if ethernet['dhcp4'] is defined %}
       dhcp4: "{{ ethernet['dhcp4'] }}"
 {% endif %}
