@@ -10,73 +10,10 @@ SPDX-License-Identifier: Apache-2.0
 network:
   version: 2
   renderer: networkd
-{% if netplan_ethernets is defined %}
-  ethernets:
-{% for ethernet in netplan_ethernets %}
-{% if ethernet['interface_name'] is defined %}
-    {{ ethernet['interface_name'] }}:
-{% if ethernet['match'] is defined %}
-      match:
-        macaddress: "{{ ethernet['match']['macaddress'] }}"
-{% endif %}
-{% if ethernet['set-name'] is defined %}
-      set-name: ethernet['set-name']
-{% endif %}
-{% if ethernet['dhcp4'] is defined %}
-      dhcp4: "{{ ethernet['dhcp4'] }}"
-{% endif %}
-{% if ethernet['gateway4'] is defined %}
-      routes:
-        - to: "default"
-          via: "{{ ethernet['gateway4'] }}"
-{% endif %}
-{% if ethernet['addresses'] is defined %}
-      addresses:
-{%for addresses in ethernet['addresses'] %}
-        - "{{ addresses }}"
-{% endfor %}
-{% endif %}
-{% if ethernet['nameservers'] is defined %}
-      nameservers:
-{% if ethernet['nameservers']['addresses'] is defined %}
-        addresses:
-{% for addresses in ethernet['nameservers']['addresses'] %}
-          - "{{ addresses }}"
-{% endfor %}
-{% endif %}
-{% if ethernet['nameservers']['search'] is defined %}
-        search:
-{%for search in ethernet['nameservers']['search'] %}
-          - "{{ search }}"
-{% endfor %}
-{% endif %}
-{% endif %}
-{% endif %}
-{% endfor %}
-{% endif %}
-{% if netplan_wifis is defined %}
-  wifis:
-{% for wifi_interface, config in netplan_wifis.items() %}
-    {{ wifi_interface }}:
-      dhcp4: {{ config['dhcp4'] | default('yes') }}
-      dhcp6: {{ config['dhcp6']  | default('yes') }}
-{% if config['addresses'] is defined %}
-      addresses: [{{ config['addresses'] | join(', ') }}]
-{% endif %}
-{% if config['gateway4'] is defined %}
-      routes:
-        - to: "default"
-          via: "{{ config['gateway4'] }}"
-{% endif %}
-{% if config['nameservers']['addresses'] is defined %}
-        addresses:
-{% for address in config['nameservers']['addresses'] %}
-          - "{{ address }}"
-{% endfor %}
-{% endif %}
-      access-points:
-        "{{ config.ssid }}":
-          password: "{{ config.password }}"
+{% if netplan_interfaces is defined %}
+{% for interface_name, config in netplan_interfaces.items() %}
+  {{ interface_name }}:
+      {{ config | to_nice_yaml(indent=4) }}
 {% endfor %}
 {% endif %}
 
