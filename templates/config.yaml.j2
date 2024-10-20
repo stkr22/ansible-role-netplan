@@ -10,10 +10,18 @@ SPDX-License-Identifier: Apache-2.0
 network:
   version: 2
   renderer: networkd
-{% if netplan_interfaces is defined %}
-{% for interface_name, config in netplan_interfaces.items() %}
-  {{ interface_name }}:
-      {{ config | to_nice_yaml(indent=4) }}
+{% if netplan_interfaces['ethernets'] is defined %}
+  ethernets:
+{% for interface_name, config in netplan_interfaces['ethernets'].items() %}
+      {{ interface_name }}:
+        {{ config | to_nice_yaml(indent=6) }}
+{% endfor %}
+{% endif %}
+{% if netplan_interfaces['wifis'] is defined %}
+  wifis:
+{% for interface_name, config in netplan_interfaces['wifis'].items() %}
+      {{ interface_name }}:
+        {{ config | to_nice_yaml(indent=6) }}
 {% endfor %}
 {% endif %}
 
