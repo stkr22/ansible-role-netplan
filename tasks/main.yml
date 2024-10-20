@@ -8,7 +8,7 @@
 - name: Check whether network configurations are given.
   ansible.builtin.assert:
     that:
-      - (netplan_ethernets is defined and netplan_ethernets | length > 0) or (netplan_wifis is defined and netplan_wifis | length > 0)
+      - (netplan_interfaces is defined and netplan_interfaces | length > 0)
 
 - name: Gather package facts
   ansible.builtin.package_facts:
